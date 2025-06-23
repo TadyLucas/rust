@@ -1,0 +1,91 @@
+use std::io;
+
+fn main() -> io::Result<()> {
+    /*
+    Features to Implement
+
+    Word Count
+        Split the input by whitespace and count the number of words.
+        Practice borrowing a string slice.
+
+    Character Count (excluding whitespace)
+        Iterate over characters and filter out spaces.
+        Pay attention to ownership vs borrowing of char iterators.
+
+    Find the Longest Word
+        Loop through the words and track the longest one.
+        Use string slices (&str) to avoid taking ownership.
+
+    Return the First Sentence
+        Find the index of the first period (.) and return the substring before or including it.
+        Use slicing, and test it on edge cases like no periods or multiple ones.
+     */
+    
+    let mut buffer = String::new();
+    let stdin = io::stdin();
+    
+    stdin.read_line(&mut buffer)?;
+    
+    let words_count = count_words(&buffer);
+    let char_count = char_count(&buffer);
+    let longest_word_length = longest_word_length(&buffer);
+    let first_sentence = first_sentence(&buffer);
+    
+    println!("Stats:");
+    println!("  words_count: {}", words_count);
+    println!("  char_count: {}", char_count);
+    println!("  longest_word_length: {}", longest_word_length);
+    println!("  first_sentence: {}", first_sentence);
+    Ok(())
+}
+fn count_words(buffer: &str) -> usize {
+    let mut wc = 0;
+    for c in buffer.chars() {
+        if c == ' ' {
+            wc += 1;
+        }
+    }
+    wc += 1;
+    wc
+}
+
+fn char_count(buffer: &str) -> usize {
+    let mut count = 0;
+    for c in buffer.chars() {
+        if c.is_alphanumeric() {
+            count += 1;
+        }
+    }
+    count
+}
+fn longest_word_length(buffer: &str) -> usize {
+    let longest_word = " ";
+    let mut count = 0;
+    let mut max_count = 0;
+    let tmp = "";
+    
+    for c in buffer.chars(){
+        if c.is_alphanumeric() {
+            count += 1;
+        }else{
+            if count > max_count {
+                max_count = count;
+            }
+        }
+    }
+    
+    max_count
+}
+
+fn first_sentence(buffer: &str) -> String {
+    let mut count = 0;
+    
+    for c in buffer.chars(){
+        if c.is_alphanumeric() {
+           count += 1;  
+        }else{
+            break;
+        }
+    }
+    buffer[count..].to_string()
+}
