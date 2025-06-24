@@ -28,13 +28,13 @@ fn main() -> io::Result<()> {
     
     let words_count = count_words(&buffer);
     let char_count = char_count(&buffer);
-    let longest_word_length = longest_word_length(&buffer);
+    let longest_word_length = longest_word(&buffer);
     let first_sentence = first_sentence(&buffer);
     
     println!("Stats:");
     println!("  words_count: {}", words_count);
     println!("  char_count: {}", char_count);
-    println!("  longest_word_length: {}", longest_word_length);
+    println!("  longest_word: {}", longest_word_length);
     println!("  first_sentence: {}", first_sentence);
     Ok(())
 }
@@ -58,34 +58,32 @@ fn char_count(buffer: &str) -> usize {
     }
     count
 }
-fn longest_word_length(buffer: &str) -> usize {
-    let longest_word = " ";
-    let mut count = 0;
-    let mut max_count = 0;
-    let tmp = "";
-    
-    for c in buffer.chars(){
-        if c.is_alphanumeric() {
-            count += 1;
-        }else{
-            if count > max_count {
-                max_count = count;
-            }
+fn longest_word(buffer: &str) -> &str {
+    let mut longest: &str = "";
+
+    for word in buffer.split_whitespace(){
+        if word.len() > longest.len() {
+            longest = word;
         }
     }
     
-    max_count
+    longest
 }
 
 fn first_sentence(buffer: &str) -> String {
     let mut count = 0;
+    let sentence_end = vec!['.', '!', '?'];
     
     for c in buffer.chars(){
-        if c.is_alphanumeric() {
-           count += 1;  
+        if sentence_end.contains(&c){
+           break;
         }else{
-            break;
+            count += 1;
         }
     }
-    buffer[count..].to_string()
+    if buffer.chars().count() == count{
+        buffer.to_string()
+    }else{
+        buffer[..count+1].to_string()
+    }
 }
